@@ -212,8 +212,7 @@ history_gru = model_gru.fit(x_train,
                               y_train, 
                               epochs=1,
                               batch_size=64,
-                              validation_split=0.02,
-                              callbacks=[checkpoint_callback_gru])
+                              validation_split=0.02)
 
 with open(DIR + 'agora_hack_products/test_request.json', encoding='utf-8') as f:
    tst = json.load(f)
