@@ -221,7 +221,7 @@ test = pd.DataFrame.from_dict(tst, orient='columns')
 
 prep(test)
 
-test_2_sequences = tokenizer.texts_to_sequences(test['prop'])
+test_2_sequences = tokenizer.texts_to_sequences(test['props'])
 
 x_test_2 = pad_sequences(test_2_sequences, maxlen=max_news_len)
 
