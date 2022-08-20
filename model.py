@@ -109,6 +109,8 @@ def prep(df):
 
     df['props_un'] = df['props_un'].progress_apply(lem)
 
+prep(df)
+
 # создадим словарь уникальных слов для токенизации
 
 unique_words = {}
