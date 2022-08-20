@@ -28,8 +28,7 @@ from tensorflow.keras import utils
 
 import matplotlib.pyplot as plt
 
-
-DIR = 'D:/AgoraHack/agorahack-case1-team0/'
+DIR = './'
 
 with open(DIR + 'agora_hack_products/agora_hack_products.json', encoding='utf-8') as f:
    prdct = json.load(f)
@@ -248,7 +247,7 @@ for i in tqdm(test.index):
 
 test['reference_id'] = test['reference_id'].apply(lambda x: y.columns[x])
 
-out = train[['id', 'reference_id']].to_json(orient='records')
+out = test[['id', 'reference_id']].to_json(orient='records')
 
 with open('./output/test_answer.json', 'w') as f:
     f.write(out)
