@@ -98,7 +98,7 @@ def prerpocess_file(text):
     tokenizer = Tokenizer(num_words=num_words)
     tokenizer.fit_on_texts(df['props_un'])
     # теконезация текста
-    test_2_sequences = tokenizer.texts_to_sequences(text['props'])
+    test_2_sequences = tokenizer.texts_to_sequences(text['props_un'])
     x_test_2 = pad_sequences(test_2_sequences, maxlen=max_news_len)
 
     # загрузка весов
