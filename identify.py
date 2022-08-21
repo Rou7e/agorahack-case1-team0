@@ -221,7 +221,7 @@ def identify():
 
     prep(test)
 
-    test_2_sequences = tokenizer.texts_to_sequences(test['props'])
+    test_2_sequences = tokenizer.texts_to_sequences(test['props_un'])
 
     x_test_2 = pad_sequences(test_2_sequences, maxlen=max_news_len)
 
