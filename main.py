@@ -3,8 +3,10 @@
 import http.server
 import socketserver
 import io
-import cgi
+import json
 from identify import identify
+from model import prepare_model
+
 
 PORT = 8100
 
@@ -32,26 +34,20 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             f.close()
 
     def deal_post_data(self):
-        ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
-        pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
-        pdict['CONTENT-LENGTH'] = int(self.headers['Content-Length'])
-        if ctype == 'multipart/form-data':
-            form = cgi.FieldStorage(fp=self.rfile, headers=self.headers,
-                                    environ={'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': self.headers['Content-Type'], })
-            print(type(form))
-            try:
-                if isinstance(form["file"], list):
-                    for record in form["file"]:
-                        open("./%s" % record.filename, "wb").write(record.file.read())
-                else:
-                    open("./%s" % form["file"].filename, "wb").write(form["file"].file.read())
-            except IOError:
-                return False, "Can't create file to write, do you have permission to write?"
+
+        self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+
+        self.send_response(200)
+
+        data = json.loads(self.data_string)
+        with open("test_request.json", "w") as outfile:
+            json.dump(data, outfile)
 
         return True, identify()
 
 
 def main():
+    prepare_model()
     Handler = CustomHTTPRequestHandler
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("serving at port" , PORT)

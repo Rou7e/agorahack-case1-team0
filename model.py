@@ -141,7 +141,7 @@ def predict2json(y_test_pred_cnn, test, y, path='result.json', write2File=True):
         return out
 
 
-def main():
+def prepare_model():
     labels = df[df['is_reference'] == True]['product_id'].count()
 
     df.loc[(df['is_reference'] == True), 'reference_id'] = df['product_id']
@@ -193,6 +193,3 @@ def main():
 
     prerpocess_file(test)
 
-
-if __name__ == '__main__':
-    main()
