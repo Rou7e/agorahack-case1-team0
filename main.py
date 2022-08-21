@@ -19,14 +19,14 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         f = io.BytesIO()
         if r:
             f.write(b"Success\n")
-            f.write(bytes(info, 'utf-8'))
+            f.write(bytes(json.dumps(info), 'utf-8'))
 
         else:
             f.write(b"Failed\n")
         length = f.tell()
         f.seek(0)
         self.send_response(200)
-        self.send_header("Content-type", "text/plain")
+        self.send_header("Content-type", "application/json")
         self.send_header("Content-Length", str(length))
         self.end_headers()
         if f:
