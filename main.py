@@ -43,11 +43,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         with open("test_request.json", "w") as outfile:
             json.dump(data, outfile)
 
-        return True, identify()
+        return True, prepare_model()
 
 
 def main():
-    prepare_model()
+    
     Handler = CustomHTTPRequestHandler
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("serving at port" , PORT)

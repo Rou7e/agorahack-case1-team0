@@ -107,7 +107,7 @@ def prerpocess_file(text):
     y_test_pred_cnn = cnn.predict(x_test_2)
 
     # по умолчанию стоит запись в файл
-    predict2json(y_test_pred_cnn, text, pd.get_dummies(df['reference_id']))
+    return predict2json(y_test_pred_cnn, text, pd.get_dummies(df['reference_id']))
 
 
 # на вход получает 2 предсказания из CNN & GRU
@@ -137,6 +137,7 @@ def predict2json(y_test_pred_cnn, test, y, path='result.json', write2File=True):
     if write2File:
         with open(path, 'w') as f:
             f.write(out)
+        return out
     else:
         return out
 
@@ -191,5 +192,5 @@ def prepare_model():
     # test_2_sequences = tokenizer.texts_to_sequences(test['props'])
     # x_test_2 = pad_sequences(test_2_sequences, maxlen=max_news_len)
 
-    prerpocess_file(test)
-
+    return prerpocess_file(test)
+    
