@@ -115,23 +115,30 @@ def prerpocess_file(text):
 # write2File=True - автоматическая запись предсказания в файл, в таком случае нужно передать. По умолчание result.json
 # write2File=False - вернет предсказание
 def predict2json(y_test_pred_cnn, test, y, path='result.json', write2File=True):
-    test_pred = np.zeros(y_test_pred_cnn.shape)
 
-    for i in tqdm(range(y_test_pred_cnn.shape[0])):
-        for j in range(y_test_pred_cnn.shape[1]):
-            test_pred[i, j] = y_test_pred_cnn[i, j]
-
-    test_pred_class = []
-    for i in range(len(test_pred)):
-        index, max_value = max(enumerate(test_pred[i]), key=lambda i_v: i_v[1])
-        test_pred_class.append(index)
+    for i in range(len(y_test_pred_cnn)):
+        if max(y_test_pred_cnn[i]) < 0.3:
+            index = len(y_test_pred_cnn) + 1000000 # если максимальное предсказание менее 30% "убираем" index за пределы количества эталонов
+            test_pred_class.append((index))
+        else:
+            index, max_value = max(enumerate(y_test_pred_cnn[i]), key=lambda i_v: i_v[1])
+            test_pred_class.append((index))
 
     test['reference_id'] = 0
 
     for i in tqdm(test.index):
         test['reference_id'].iloc[i] = test_pred_class[i]
+    
+    def nn(x): # т.к. index по части предсказаниями за пределеми, то если ошибка выводим nan
+        try:
+            res = y.columns[x]
+            return res
+        except:
+            res = np.NaN
+            return res
 
-    test['reference_id'] = test['reference_id'].apply(lambda x: y.columns[x])
+    test['reference_id'] = test['reference_id'].apply(lambda x: nn(x))
+    
     out = test[['id', 'reference_id']].to_json(orient='records')
 
     if write2File:
